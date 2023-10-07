@@ -14,7 +14,7 @@ func FileExists(fileName string) bool {
 	return true
 }
 
-func ReadFile(f string) (fileContent string) {
+func ReadFile(f string) *string {
 	file, err := os.Open(f)
 	if err != nil {
 		log.Fatal(err)
@@ -25,6 +25,6 @@ func ReadFile(f string) (fileContent string) {
 	if err != nil {
 		log.Fatalf("unable to read file: %v", err)
 	}
-	fileContent = strings.Trim(string(b), "\r\n")
-	return
+	fileContent := strings.Trim(string(b), "\r\n")
+	return &fileContent
 }

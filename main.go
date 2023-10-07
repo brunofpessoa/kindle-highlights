@@ -13,17 +13,27 @@ import (
 )
 
 func main() {
-	var dbFileName, file, bookName string
+	var dbFileName, fileName, bookName string
 	var minLen, maxLen int
 	var showAll, noDuplicates bool
 
 	flag.IntVar(&maxLen, "max", 500, "Max length of the highlight")
 	flag.IntVar(&minLen, "min", 10, "Min length of the highlight")
 	flag.StringVar(&dbFileName, "db", "database.sqlite3", "Database name")
-	flag.StringVar(&file, "file", "My Clippings.txt", "File path")
-	flag.StringVar(&bookName, "book", "", "Specifies which book to take the highlight from. Can be the full name or part of it")
+	flag.StringVar(&fileName, "file", "My Clippings.txt", "File path")
+	flag.StringVar(
+		&bookName,
+		"book",
+		"",
+		"Specifies which book to take the highlight from. Can be the full name or part of it",
+	)
 	flag.BoolVar(&showAll, "all", false, "Show all highlights")
-	flag.BoolVar(&noDuplicates, "no-duplicates", true, "Determine if should remove duplicated highlights. If true will keep the last one created")
+	flag.BoolVar(
+		&noDuplicates,
+		"no-duplicates",
+		true,
+		"Determine if should remove duplicated highlights. If true will keep the last one created",
+	)
 
 	flag.Parse()
 
@@ -39,7 +49,7 @@ func main() {
 
 	if !util.FileExists(dbFileName) {
 		fmt.Println("Wait, creating database...")
-		useCases.PersistHighlights(db, file, noDuplicates)
+		useCases.PersistHighlights(db, fileName, noDuplicates)
 		fmt.Println("Done! Run again to print your highlights")
 		return
 	}

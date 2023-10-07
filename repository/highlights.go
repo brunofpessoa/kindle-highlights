@@ -75,14 +75,14 @@ func IsContentDuplicated(tx *sql.Tx, h domain.Highlight, bookID int64) bool {
 	return false
 }
 
-func InsertData(db *sql.DB, highlights []domain.Highlight, noDuplicates bool) {
+func InsertData(db *sql.DB, highlights *[]domain.Highlight, noDuplicates bool) {
 	tx, err := db.Begin()
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer tx.Rollback()
 
-	for _, h := range highlights {
+	for _, h := range *highlights {
 		bookID := InsertBook(tx, h)
 		isDuplicated := IsContentDuplicated(tx, h, bookID)
 		if isDuplicated && noDuplicates {
@@ -130,7 +130,6 @@ func GetRand(db *sql.DB, minLen int, maxLen int) (h domain.Highlight) {
         LIMIT 1;
     `
 	err := db.QueryRow(query, minLen, maxLen).Scan(&h.Content, &h.Date, &h.Book, &h.Position)
-
 	if err != nil {
 		log.Fatal("unable to find any highlight with theses parameters")
 	}
@@ -149,7 +148,8 @@ func GetRandByBook(db *sql.DB, minLen int, maxLen int, bookName string) (h domai
         LIMIT 1;
     `
 
-	err := db.QueryRow(query, minLen, maxLen, bookID).Scan(&h.Content, &h.Date, &h.Book, &h.Position)
+	err := db.QueryRow(query, minLen, maxLen, bookID).
+		Scan(&h.Content, &h.Date, &h.Book, &h.Position)
 	if err != nil {
 		log.Fatal("unable to find any highlight with theses parameters")
 	}
@@ -180,7 +180,12 @@ func GetAll(db *sql.DB, minLen int, maxLen int) (highlights []domain.Highlight) 
 	return
 }
 
-func GetAllByBook(db *sql.DB, minLen int, maxLen int, bookName string) (highlights []domain.Highlight) {
+func GetAllByBook(
+	db *sql.DB,
+	minLen int,
+	maxLen int,
+	bookName string,
+) (highlights []domain.Highlight) {
 	bookID := getBookID(db, bookName)
 
 	query := `
