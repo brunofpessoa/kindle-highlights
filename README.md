@@ -58,6 +58,8 @@ The program takes a text file containing Kindle highlights and notes as input an
 
 - `-no-duplicate`: Restricts insertion of highlights that looks like the same, keeping the last one created. (Default: true)
 
+- `-list-books`: List all books. (Default: false)
+
 ## Examples
 
 1. **Convert Kindle Highlights to SQLite Database**:
@@ -91,6 +93,14 @@ The program takes a text file containing Kindle highlights and notes as input an
 
    ```bash
    ./kindle-highlights -db="my_highlights.db" -book="Os irmãos Karamázov" -all
+   ```
+
+5. **Display All Books**:
+
+   To display all books, use the following command:
+
+   ```bash
+   ./kindle-highlights -db="my_highlights.db" -list-books
    ```
 
 Note: You can combine options as needed to filter and display highlights and notes based on your preferences.
