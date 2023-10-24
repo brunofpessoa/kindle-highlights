@@ -2,6 +2,7 @@ package repository
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 
 	"github.com/brunofpessoa/kindle-highlights/domain"
@@ -56,6 +57,23 @@ func InsertBook(tx *sql.Tx, h domain.Highlight) (bookID int64) {
 		}
 		bookID, _ = result.LastInsertId()
 	}
+	return
+}
+
+func ListBooks(db *sql.DB) (books []string) {
+	rows, err := db.Query("SELECT name FROM books;")
+	for rows.Next() {
+		var book string
+		if err := rows.Scan(&book); err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(book)
+		books = append(books, book)
+	}
+	if err != nil {
+		log.Fatal("Your database is empty")
+	}
+
 	return
 }
 

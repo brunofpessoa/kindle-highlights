@@ -3,9 +3,10 @@ package useCases
 import (
 	"database/sql"
 
+	"github.com/fatih/color"
+
 	"github.com/brunofpessoa/kindle-highlights/domain"
 	"github.com/brunofpessoa/kindle-highlights/repository"
-	"github.com/fatih/color"
 )
 
 func print(h domain.Highlight) {
@@ -37,5 +38,14 @@ func PrintAllByBook(db *sql.DB, minLen int, maxLen int, bookName string) {
 	highlights := repository.GetAllByBook(db, minLen, maxLen, bookName)
 	for _, h := range highlights {
 		print(h)
+	}
+}
+
+func PrintAllBooks(db *sql.DB) {
+	books := repository.ListBooks(db)
+	content := color.New(color.FgGreen).Add(color.Bold)
+
+	for i, b := range books {
+		content.Printf("%v - %s\n", i+1, b)
 	}
 }

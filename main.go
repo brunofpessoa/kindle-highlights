@@ -15,7 +15,7 @@ import (
 func main() {
 	var dbFileName, fileName, bookName string
 	var minLen, maxLen int
-	var showAll, noDuplicates bool
+	var showAll, noDuplicates, listBooks bool
 
 	flag.IntVar(&maxLen, "max", 500, "Max length of the highlight")
 	flag.IntVar(&minLen, "min", 10, "Min length of the highlight")
@@ -34,6 +34,7 @@ func main() {
 		true,
 		"Determine if should remove duplicated highlights. If true will keep the last one created",
 	)
+	flag.BoolVar(&listBooks, "list-books", false, "List all books")
 
 	flag.Parse()
 
@@ -60,6 +61,8 @@ func main() {
 		useCases.PrintRandByBook(db, minLen, maxLen, bookName)
 	} else if showAll {
 		useCases.PrintAll(db, minLen, maxLen)
+	} else if listBooks {
+		useCases.PrintAllBooks(db)
 	} else {
 		useCases.PrintRand(db, minLen, maxLen)
 	}
